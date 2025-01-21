@@ -1,4 +1,4 @@
-module config
+module github.com/Negative3103/config
 
 go 1.22
 
