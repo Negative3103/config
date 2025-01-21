@@ -1,7 +1,6 @@
 package main
 
 import (
-	"config/internal/config"
 	"context"
 	"database/sql"
 	"flag"
@@ -9,11 +8,12 @@ import (
 	"net"
 	"time"
 
-	sq "github.com/Masterminds/squirrel"
 	"github.com/Negative3103/config/internal/config"
+
+	sq "github.com/Masterminds/squirrel"
 	desc "github.com/Negative3103/config/pkg/note_v1"
 	"github.com/brianvoe/gofakeit"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -22,7 +22,7 @@ import (
 var configPath string
 
 func init() {
-	flag.StringVar(&configPath, "config-path", ".env", "path to config file")
+	flag.StringVar(&configPath, "config-path", "local.env", "path to config file")
 }
 
 type server struct {
@@ -30,7 +30,7 @@ type server struct {
 	pool *pgxpool.Pool
 }
 
-func (s *server) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
+func (s *server) Create(ctx context.Context, req *desc.CreateResuest) (*desc.CreateResponse, error) {
 	// Делаем запрос на вставку записи в таблицу note
 	builderInsert := sq.Insert("note").
 		PlaceholderFormat(sq.Dollar).

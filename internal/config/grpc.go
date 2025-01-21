@@ -1,31 +1,32 @@
-package env
+package config
 
 import (
-	"config/internal/config"
 	"errors"
 	"net"
 	"os"
 )
 
-var _ config.GRPCConfig = (*grpcConfig)(nil)
-
 const (
-	grpcHostEvnName = "GRPC_HOST"
-	grpcPortEvnName = "GRPC_PORT"
+	grpcHostEnvName = "GRPC_HOST"
+	grpcPortEnvName = "GRPC_PORT"
 )
+
+type GRPCConfig interface {
+	Address() string
+}
 
 type grpcConfig struct {
 	host string
 	port string
 }
 
-func NewGRPCConfig() (*grpcConfig, error) {
-	host := os.Getenv(grpcHostEvnName)
+func NewGRPCConfig() (GRPCConfig, error) {
+	host := os.Getenv(grpcHostEnvName)
 	if len(host) == 0 {
 		return nil, errors.New("grpc host not found")
 	}
 
-	port := os.Getenv(grpcPortEvnName)
+	port := os.Getenv(grpcPortEnvName)
 	if len(port) == 0 {
 		return nil, errors.New("grpc port not found")
 	}
